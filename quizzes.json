@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "quizzes": [
+    {
+      "id": "nenormalnaya-gruppa-2",
+      "slug": "nenormalnaya-gruppa-2",
+      "title": "Ненормальная группа 2",
+      "subtitle": "Контур наносит ответный удар",
+      "description": "25 вопросов по переписке: офисные истории, шутки и легендарные сообщения.",
+      "edition": "02",
+      "category": "Истории чата",
+      "difficulty": "Средняя",
+      "durationMinutes": 18,
+      "version": 1,
+      "storagePrefix": "nenormalny-quiz-2",
+      "questionCount": 25,
+      "roundCount": 5,
+      "maxScore": 30
+    },
+    {
+      "id": "nenormalnaya-gruppa-statistika",
+      "slug": "perepis-nenormalnyh",
+      "title": "Перепись ненормальных",
+      "subtitle": "Кто спамит, кто собирает сердца и кто чемпион по мату",
+      "description": "Цифры, реакции, мемы и неожиданные факты из 16 833 сообщений.",
+      "edition": "03",
+      "category": "Статистика чата",
+      "difficulty": "Сложная",
+      "durationMinutes": 18,
+      "version": 1,
+      "storagePrefix": "nenormalny-quiz-stats",
+      "questionCount": 25,
+      "roundCount": 5,
+      "maxScore": 30
+    }
+  ]
+}
