@@ -32,6 +32,22 @@
       "questionCount": 25,
       "roundCount": 5,
       "maxScore": 30
+    },
+    {
+      "id": "nenormalnaya-gruppa-expert",
+      "slug": "ekspertny-uroven",
+      "title": "Ненормальная группа: Экспертный уровень",
+      "subtitle": "Помнить всё. Включая то, что пролистал.",
+      "description": "25 новых вопросов о редких деталях переписки: офис, культура, поездки, спорт и планы. Даты и цитаты — в разборе каждого ответа.",
+      "edition": "04",
+      "category": "Экспертный уровень",
+      "difficulty": "Очень сложная",
+      "durationMinutes": 25,
+      "version": 1,
+      "storagePrefix": "nenormalny-quiz-expert",
+      "questionCount": 25,
+      "roundCount": 5,
+      "maxScore": 30
     }
   ]
 }

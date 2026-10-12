@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="#0f151a" name="theme-color"/>
+<meta content="Самостоятельный квиз на 25 вопросов — играй с телефона и сохраняй личные рекорды." name="description"/>
+<title>Ненормальный квиз — игра</title>
+<link href="../../assets/style.css" rel="stylesheet"/>
+
+
+
+<script defer="True" src="../../assets/quiz-engine.js"></script></head>
+<body>
+<div aria-hidden="true" class="ambient ambient-one"></div>
+<div aria-hidden="true" class="ambient ambient-two"></div>
+<div class="shell">
+<header class="topbar">
+<a aria-label="На главную страницу" class="logo" href="../../index.html" id="home-logo"><span class="logo-mark">Н<span>!</span></span><span class="logo-text">НЕНОРМАЛЬНЫЙ<br/>КВИЗ</span></a>
+<div class="topbar-side"><span class="age-mark">18+</span><span class="topbar-tag">САЙТ ДЛЯ ДРУЗЕЙ</span></div>
+</header>
+<main id="main-content">
+
+<section aria-labelledby="home-title" class="view" id="view-home">
+<div class="hero">
+<div class="eyebrow"><span class="pulse-dot"></span> АРХИВНЫЙ СПЕЦВЫПУСК / 2023—2026</div>
+<div aria-hidden="true" class="hero-index" id="hero-number">№ 02 / 03</div>
+<h1 id="home-title">НЕНОРМАЛЬНАЯ<br/><em>ГРУППА</em><span class="hero-two">2</span></h1>
+<p class="hero-subtitle" id="hero-subtitle">КОНТУР НАНОСИТ ОТВЕТНЫЙ УДАР</p>
+<p class="hero-description" id="hero-description">25 вопросов по вашей переписке. Три года офисного абсурда, великих цитат и решений, которые трезвым умом не объяснить.</p>
+<div aria-label="Параметры игры" class="stats-strip">
+<div><strong>05</strong><small>РАУНДОВ</small></div>
+<div><strong>25</strong><small>ВОПРОСОВ</small></div>
+<div><strong>30</strong><small>МАКС. ОЧКОВ</small></div>
+</div>
+<div class="home-actions">
+<button class="btn btn-primary btn-big" id="home-play" type="button">НАЧАТЬ КВИЗ <span aria-hidden="true">↗</span></button>
+<button class="btn btn-ghost" hidden="" id="home-new" type="button">Начать заново</button>
+</div>
+<p class="best-line" hidden="" id="home-best"></p><a class="text-button" href="../../index.html" id="home-library">← ВЫБРАТЬ ДРУГОЙ КВИЗ</a>
+</div>
+<div class="round-list-intro"><div class="section-label">КАРТА БЕЗУМИЯ</div><span>5 РАУНДОВ</span></div>
+<ol class="round-list" id="home-rounds"></ol>
+<div class="howto">
+<div class="howto-title"><span>↳</span> КАК ИГРАТЬ</div>
+<p>Играй один или с друзьями. Выбирай один из четырёх вариантов или вписывай ответ. Правду узнаешь только после проверки. Последний раунд приносит двойные очки.</p>
+<p class="privacy-note">Игра работает прямо в браузере. Счёт сохраняется на этом устройстве; имена игроков и результаты никуда не отправляются.</p>
+</div>
+</section>
+<section aria-labelledby="question-heading" class="view" hidden="" id="view-game">
+<div class="game-toolbar"><a class="text-button" href="../../index.html" id="game-home">← НА ГЛАВНУЮ</a><div class="score-chip"><span>ОЧКИ</span><strong id="game-score">00 / 30</strong></div></div>
+<div class="progress-area"><div class="progress-titles"><span id="round-label">РАУНД 01 / 05</span><span id="question-label">ВОПРОС 01 / 25</span></div><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div></div>
+<div class="game-heading"><p class="round-name" id="round-name"></p><div class="question-meta"><span class="type-chip" id="question-type"></span><span class="point-label" id="question-value"></span></div></div>
+<article class="question-card"><h2 id="question-heading"></h2><form id="answer-form" novalidate=""><fieldset class="choice-list" hidden="" id="choice-fieldset"><legend class="sr-only">Выберите один вариант</legend><div id="choice-list"></div></fieldset><div class="input-wrap" hidden="" id="input-wrap"><label for="free-answer">ВАШ ОТВЕТ</label><input autocapitalize="sentences" autocomplete="off" id="free-answer" maxlength="180" placeholder="Ну, вспоминайте…" spellcheck="false" type="text"/></div><button class="btn btn-primary btn-big" disabled="" id="check-answer" type="submit">ПРОВЕРИТЬ ОТВЕТ <span aria-hidden="true">→</span></button></form><div aria-live="polite" class="reveal" hidden="" id="answer-reveal"><div class="reveal-status"><div class="reveal-icon" id="reveal-icon"></div><div><div class="reveal-title" id="reveal-title"></div><div class="reveal-points" id="reveal-points"></div></div></div><div class="answer-actual"><span>ПРАВИЛЬНЫЙ ОТВЕТ</span><strong id="correct-answer"></strong></div><p class="answer-explanation" id="answer-explanation"></p><div class="roast-box"><div class="roast-kicker">КОММЕНТАРИЙ РЕДАКЦИИ ↘</div><p id="answer-joke"></p></div><details class="source-details"><summary>ОРИГИНАЛ ИЗ ПЕРЕПИСКИ <span>+</span></summary><p id="answer-source"></p></details><button class="btn btn-outline" hidden="" id="manual-credit" type="button">ЛАДНО, ЗАСЧИТАЙ ПО СМЫСЛУ</button><button class="btn btn-primary btn-big" id="next-question" type="button">СЛЕДУЮЩИЙ ВОПРОС <span aria-hidden="true">→</span></button></div></article>
+<div class="under-question"><span>НЕ ГУГЛИТЬ, ЧИТЕРЫ</span><span>ВРЕМЯ НЕ ОГРАНИЧЕНО</span></div>
+<button class="text-button restart-link" id="game-restart" type="button">Сбросить прохождение</button>
+</section>
+<section aria-labelledby="between-title" class="view" hidden="" id="view-between">
+<div class="between-hero"><span class="eyebrow">РАУНД ПРОЙДЕН / ПРОДОЛЖАЕМ ЦИРК</span><div class="oversize-index" id="between-number">01</div><h2 id="between-title"></h2><div class="between-score"><span id="between-points"></span><small>БАЛЛОВ ЗА РАУНД</small></div><p id="between-roast"></p></div>
+<div class="next-round-panel"><span>СЛЕДУЮЩИЙ РАУНД</span><h3 id="between-next-title"></h3><p id="between-next-description"></p></div>
+<button class="btn btn-primary btn-big" id="between-continue" type="button">ПРОДОЛЖИТЬ <span aria-hidden="true">↗</span></button>
+<a class="text-button center-button" href="../../index.html" id="between-home">Пока хватит, к списку игр</a>
+</section>
+<section aria-labelledby="finish-title" class="view" hidden="" id="view-finish">
+<div class="final-hero"><div class="eyebrow"><span class="pulse-dot"></span> АРХИВ ПРОЙДЕН / ВЫЖИЛИ НЕ ВСЕ</div><h2 id="finish-title">РЕЗУЛЬТАТ</h2><div class="final-score" id="finish-score">00<span>/30</span></div><div class="final-badge" id="finish-badge"></div><p class="final-description" id="finish-description"></p><p class="best-line" id="finish-best"></p></div>
+<div class="score-by-round"><div class="section-label">РАЗБОР ПОЛЁТОВ</div><div id="finish-rounds"></div></div>
+<div class="finish-actions"><button class="btn btn-primary btn-big" id="share-result" type="button">ПОДЕЛИТЬСЯ РЕЗУЛЬТАТОМ <span aria-hidden="true">↗</span></button><button class="btn btn-outline" id="finish-restart" type="button">СЫГРАТЬ ЕЩЁ РАЗ</button><a class="btn btn-ghost" href="../../index.html" id="finish-library">ВЫБРАТЬ ДРУГОЙ КВИЗ</a></div>
+<div class="share-fallback" hidden="" id="share-fallback"><label for="share-message">Скопируйте результат и отправьте друзьям:</label><textarea id="share-message" readonly="" rows="3"></textarea></div>
+</section>
+</main>
+<footer class="footer"><div>НЕНОРМАЛЬНЫЙ КВИЗ <span>© 2026</span></div><div>СОЗДАНО НА ОСНОВЕ ПЕРЕПИСКИ. НЕ СЕРЬЁЗНО.</div></footer>
+</div>
+</body>
+</html>
+

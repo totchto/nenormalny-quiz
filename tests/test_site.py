@@ -5,12 +5,15 @@ HTML/CSS/JS and JSON via the in-memory page context, preserving the actual app
 scripts, DOM and the exact same fetch result shape as GitHub Pages.
 """
 import base64
+import os
 import json
 from pathlib import Path
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = Path(os.environ.get('QUIZ_TEST_OUTPUT', str(ROOT.parent/'output')))
+OUTPUT.mkdir(parents=True, exist_ok=True)
 STYLE = (ROOT/'assets'/'style.css').read_text(encoding='utf-8')
 JS = {
     'catalog': (ROOT/'assets'/'catalog.js').read_text(encoding='utf-8'),
@@ -62,20 +65,20 @@ def answer_one(page, quiz):
 
 def run():
     with sync_playwright() as p:
-        browser=p.chromium.launch(headless=True,executable_path='/usr/bin/chromium',args=['--no-sandbox'])
+        browser=p.chromium.launch(headless=True, channel='chrome')
         quizzes=CATALOG['quizzes']
         errors=[]
         for width in [320,375,390,768,1280]:
             page=browser.new_page(viewport={'width':width,'height':850})
             page.on('pageerror',lambda error: errors.append(str(error)))
             boot(page,'catalog')
-            assert page.locator('.quiz-tile').count()==2
+            assert page.locator('.quiz-tile').count()==len(quizzes)
             assert page.locator('a[href="./quizzes/nenormalnaya-gruppa-2/"]').count()==1
             assert page.locator('a[href="./quizzes/perepis-nenormalnyh/"]').count()==1
             overflow=page.evaluate('document.documentElement.scrollWidth - innerWidth')
             assert overflow<=1,('overflow catalog',width,overflow)
             if width==390:
-                page.screenshot(path='/mnt/data/nenormalny-pages-catalog.png',full_page=True)
+                page.screenshot(path=str(OUTPUT/'nenormalny-pages-catalog.png'),full_page=True)
             page.close()
         saved={}
         for entry in quizzes:
@@ -111,21 +114,21 @@ def run():
             assert num==25,(entry['id'],num)
             assert '30' in page.locator('#finish-score').inner_text()
             assert page.locator('#view-finish').is_visible()
-            if entry==quizzes[1]:page.screenshot(path='/mnt/data/nenormalny-pages-finish.png',full_page=True)
+            if entry==quizzes[1]:page.screenshot(path=str(OUTPUT/'nenormalny-pages-finish.png'),full_page=True)
             saved=snapshot(page)
             page.close()
         page=browser.new_page(viewport={'width':390,'height':844})
         page.on('pageerror',lambda error: errors.append(str(error)))
         boot(page,'catalog',saved)
-        assert page.locator('.quiz-tile').count()==2
-        assert page.get_by_text('ВАШ РЕКОРД: 30 / 30').count()==2
+        assert page.locator('.quiz-tile').count()==len(quizzes)
+        assert page.get_by_text('ВАШ РЕКОРД: 30 / 30').count()==len(quizzes)
         for entry in quizzes:
             assert json.loads(saved[entry['storagePrefix']+':session:v1'])['score']==30
             assert saved[entry['storagePrefix']+':best:v1']=='30'
-        page.screenshot(path='/mnt/data/nenormalny-pages-records.png',full_page=True)
+        page.screenshot(path=str(OUTPUT/'nenormalny-pages-records.png'),full_page=True)
         page.close()
         assert not errors,errors
-        print('PASS: catalogue responsive 320/375/390/768/1280; 2 working pages; 50 correct questions; separate records; session restores; 30/30 in each; no JS errors')
+        print('PASS: catalogue responsive 320/375/390/768/1280; all catalog pages; all correct questions; separate records; session restores; 30/30 in each; no JS errors')
         browser.close()
 
 if __name__=='__main__':run()
