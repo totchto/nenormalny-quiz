@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10131d">
+  <meta name="description" content="Пиксельная аркада: лети сквозь поток сообщений, собирай штаны и уворачивайся от чатового хаоса.">
+  <title>Штанный поток — Ненормальный квиз</title>
+  <link rel="stylesheet" href="../../assets/style.css">
+  <link rel="stylesheet" href="../../assets/shanny.css">
+  <script defer src="../../assets/shanny.js"></script>
+</head>
+<body class="shanny-body">
+  <div class="shanny-shell">
+    <header class="topbar">
+      <a aria-label="На главную страницу" class="logo" href="../../index.html"><span class="logo-mark">Н<span>!</span></span><span class="logo-text">НЕНОРМАЛЬНЫЙ<br>КВИЗ</span></a>
+      <a class="text-button shanny-back" href="../../index.html">← КО ВСЕМ ИГРАМ</a>
+    </header>
+
+    <main class="shanny-main">
+      <div class="shanny-intro">
+        <div class="eyebrow"><span class="pulse-dot"></span> АРКАДНЫЙ СПЕЦРЕЖИМ / 01</div>
+        <h1>ШТАННЫЙ<br><em>ПОТОК.</em></h1>
+        <p>Родион летит через чат. Собирай штаны, уклоняйся от сообщений и переживи финальный шквал.</p>
+      </div>
+
+      <section class="arcade" aria-label="Игра Штанный поток">
+        <div class="arcade-hud" aria-live="polite">
+          <div><span>ШТАНЫ</span><strong id="pants-count">00</strong></div>
+          <div class="arcade-hud-center"><span>ПОЛЁТ</span><strong id="time-left">52</strong></div>
+          <div class="arcade-lives"><span>РЕАКЦИИ</span><strong id="lives" aria-label="Три жизни">♥ ♥ ♥</strong></div>
+        </div>
+        <div class="canvas-wrap" id="canvas-wrap">
+          <canvas id="flight" width="480" height="300" tabindex="0" aria-label="Поле игры. Управляйте Родионом стрелками, клавишами WASD или пальцем на сенсорном экране.">Для игры нужен браузер с поддержкой Canvas.</canvas>
+          <div class="game-overlay" id="game-overlay">
+            <div class="overlay-content">
+              <div class="pixel-stamp">Н! / 01</div>
+              <p class="overlay-kicker" id="overlay-kicker">ПОЛЁТНАЯ ИНСТРУКЦИЯ</p>
+              <h2 id="overlay-title">СОБЕРИ<br>ШТАНЫ</h2>
+              <p class="overlay-copy" id="overlay-copy">Уворачивайся от голосовых и пересланных новостей. Три сердечка — и можно лететь дальше.</p>
+              <button class="btn btn-primary arcade-start" id="start-game" type="button">ВЗЛЕТЕТЬ <span aria-hidden="true">↗</span></button>
+              <p class="overlay-controls">СТРЕЛКИ / WASD · НА ТЕЛЕФОНЕ — ВЕДИ ПАЛЬЦЕМ</p>
+            </div>
+          </div>
+        </div>
+        <div class="arcade-controls" aria-label="Управление">
+          <span class="control-key">↑</span><span>двигайся в любую сторону</span><span class="control-key">W A S D</span>
+        </div>
+      </section>
+
+      <div class="arcade-below">
+        <p id="best-score" class="best-line">РЕКОРД НА ЭТОМ УСТРОЙСТВЕ: 0</p>
+        <p class="arcade-tip">Собирай штаны подряд для комбо. Красные предметы лучше обходить по широкой дуге.</p>
+      </div>
+    </main>
+
+    <footer class="footer"><div>НЕНОРМАЛЬНЫЙ КВИЗ <span>© 2026</span></div><div>СОЗДАНО НА ОСНОВЕ ПЕРЕПИСКИ. НЕ СЕРЬЁЗНО.</div></footer>
+  </div>
+</body>
+</html>

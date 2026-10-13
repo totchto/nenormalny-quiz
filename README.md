@@ -12,13 +12,15 @@
 
 # Ненормальный квиз — сайт с отдельными страницами игр
 
-Статический сайт для GitHub Pages: **каталог → страница конкретного квиза → вопросы**. Есть два квиза по архиву «Ненормальная группа», всего 50 вопросов. Общий движок и стили; никаких платных API, сервера или базы данных.
+Статический сайт для GitHub Pages: **каталог → отдельные страницы игр**. Есть три квиза по архиву «Ненормальная группа» и аркадный режим «Штанный поток». Квизовый движок и пиксельная аркада работают в браузере; сервер и база данных не нужны.
 
 ## Адреса после публикации
 
 - Каталог: `https://totchto.github.io/nenormalny-quiz/`
 - «Ненормальная группа 2»: `https://totchto.github.io/nenormalny-quiz/quizzes/nenormalnaya-gruppa-2/`
 - «Перепись ненормальных»: `https://totchto.github.io/nenormalny-quiz/quizzes/perepis-nenormalnyh/`
+- «Экспертный уровень»: `https://totchto.github.io/nenormalny-quiz/quizzes/ekspertny-uroven/`
+- «Штанный поток»: `https://totchto.github.io/nenormalny-quiz/games/shtannyy-potok/`
 
 Прежние ссылки из старой одностраничной версии вида `/?quiz=nenormalnaya-gruppa-statistika` перенаправляются на новую страницу.
 
@@ -30,6 +32,8 @@ quizzes.json                           Метаданные всех игр дл
 assets/style.css                       Общие стили
 assets/catalog.js                      Код каталога
 assets/quiz-engine.js                  Единая логика игры для любого набора вопросов
+assets/shanny.css                      Стили пиксельной аркады
+assets/shanny.js                       Игровой цикл, управление и рекорды
 quizzes/
   nenormalnaya-gruppa-2/
     index.html                          Самостоятельная страница игры
@@ -37,6 +41,9 @@ quizzes/
   perepis-nenormalnyh/
     index.html                          Самостоятельная страница игры
     questions.json                     25 вопросов «Переписи ненормальных»
+games/
+  shtannyy-potok/
+    index.html                          Пиксельная аркада с управлением клавиатурой и касанием
 tools/
   quiz-template.html                   Шаблон новой страницы
   add_quiz.py                           Установка нового квиза из JSON
