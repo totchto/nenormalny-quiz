@@ -65,7 +65,7 @@ const START_STATS={cash:30,focus:30,team:30};
 const MIN_LAUNCH_SCORE=150;
 const PIZZA_PLAYER_X=108,PIZZA_GROUND_Y=188,PIZZA_JUMP_MS=900,PIZZA_FINISH=3250;
 const PIZZA_OBSTACLES=[{distance:570,type:'rock',width:34},{distance:930,type:'gap',width:58},{distance:1280,type:'rock',width:34},{distance:1630,type:'gap',width:58},{distance:1990,type:'rock',width:34},{distance:2340,type:'gap',width:58},{distance:2700,type:'rock',width:34}];
-const state={stats:{...START_STATS},deck:[],index:0,log:[],chat:[],eventFailures:0,resolving:false,standalone:false,standaloneEventId:null,sequenceProgress:[],sequencePlaced:[],sequenceAvailable:[],sequenceSelected:null,sequenceDrag:null,sequenceSuppressClickUntil:0,collectTimer:null,collectHits:0,collectRoundSuccess:false,signatureHits:0,pizzaFrame:null,pizzaActive:false,pizzaProgress:0,pizzaHits:0,pizzaBoxes:3,pizzaBlinkUntil:0,pizzaJumpStartedAt:-Infinity,pizzaLastFrame:0,pizzaObstacles:[]};
+const state={stats:{...START_STATS},deck:[],index:0,log:[],chat:[],eventFailures:0,resolving:false,standalone:false,standaloneEventId:null,sequenceProgress:[],sequencePlaced:[],sequenceAvailable:[],sequenceSelected:null,sequenceDrag:null,sequenceSuppressClickUntil:0,collectTimer:null,collectHits:0,collectRoundSuccess:false,signatureHits:0,pizzaFrame:null,pizzaActive:false,pizzaProgress:0,pizzaHits:0,pizzaBoxes:3,pizzaBlinkUntil:0,pizzaJumpStartedAt:-Infinity,pizzaLastFrame:0,pizzaObstacles:[],pendingMiniCrash:false};
 const SEAL_OBJECTS=[['📞','Телефон'],['🗄️','Шкаф'],['🪑','Стул'],['🗃️','Тумбочка'],['🪴','Цветок'],['💻','Ноутбук']];
 const SEAL_LIFT_HOLD_MS=1500;
 let sealTarget=-1,sealAttempts=0,sealBusy=false;
@@ -202,22 +202,34 @@ function spawnSignatureCard(valid){
   card.addEventListener('animationend',()=>{if(!card.isConnected||state.resolving)return;card.remove();spawnSignatureCard(valid)});
   lane.append(card);
 }
-function resolveEvent(title,effects,success,extra){
+function resolveEvent(title,effects,success,extra,miniResult=false,reward={}){
   if(state.resolving)return;state.resolving=true;
   clearMiniTimers();
   const appliedEffects=normalizeEffects(effects);Object.keys(state.stats).forEach(k=>state.stats[k]=Math.max(0,Math.min(100,state.stats[k]+(appliedEffects[k]||0))));
   if(!success)state.eventFailures++;
   state.log.push({title,success,extra});$('#event-log').innerHTML=state.log.slice(-8).map(x=>`<li>${x.success?'✓':'!'} ${escapeHtml(x.title)}${x.extra?` — ${escapeHtml(x.extra)}`:''}</li>`).join('');
   renderMeters();
-  if(state.standalone){setTimeout(()=>{state.resolving=false;renderStandaloneResult(title,success,extra)},220);return}
+  if(miniResult){
+    state.pendingMiniCrash=!state.standalone&&Object.values(state.stats).some(v=>v<=0);
+    setTimeout(()=>{state.resolving=false;renderMiniResult(title,success,extra,reward,state.standalone)},220);
+    return;
+  }
+  if(state.standalone){setTimeout(()=>{state.resolving=false;renderMiniResult(title,success,extra,{},true)},220);return}
   if(Object.values(state.stats).some(v=>v<=0)){finishGame(true);return}
   state.index++;setTimeout(()=>{state.resolving=false;showEvent()},220);
 }
-function renderStandaloneResult(title,success,extra){$('#event-content').innerHTML=`<div class="standalone-result"><span class="ending-stamp ${success?'standalone-success':'standalone-skip'}">${success?'ПРОЙДЕНО':'ЗАВЕРШЕНО'}</span><h2>${escapeHtml(title)}</h2><p>${escapeHtml(extra||'')}</p><p class="standalone-note">Это отдельное прохождение. Показатели и результат не влияют на основную игру.</p><div class="standalone-result-actions"><button id="mini-replay" class="button button-primary" type="button">СЫГРАТЬ ЕЩЁ ↗</button><button id="mini-result-list" class="button button-secondary" type="button">К СПИСКУ МИНИИГР</button></div></div>`;$('#event-count').textContent='РЕЗУЛЬТАТ';$('#event-tip').textContent='Выбери эту игру ещё раз или вернись к списку миниигр.'}
+function renderMiniResult(title,success,extra,reward,standalone){
+  const detail=success?miniRewardSummary(reward):extra||'Награды нет, показатели не изменились.';
+  const action=standalone
+    ?'<button id="mini-replay" class="button button-primary" type="button">СЫГРАТЬ ЕЩЁ ↗</button><button id="mini-result-list" class="button button-secondary" type="button">К СПИСКУ МИНИИГР</button>'
+    :'<button id="mini-continue" class="button button-primary" type="button">ПРОДОЛЖИТЬ ↗</button>';
+  $('#event-content').innerHTML=`<div class="standalone-result mini-result"><span class="ending-stamp ${success?'standalone-success':'standalone-skip'}">${success?'ПОБЕДА':'БЕЗ НАГРАДЫ'}</span><p class="eyebrow">ИТОГ МИНИИГРЫ</p><h2>${success?'Ты выиграл!':'В этот раз не получилось'}</h2><p class="mini-result-title">${escapeHtml(title)}</p><div class="mini-result-reward"><strong>${success?'ТЫ ПОЛУЧИЛ':'ТЫ НЕ ПОЛУЧИЛ НАГРАДУ'}</strong><span>${escapeHtml(detail)}</span></div>${standalone?'<p class="standalone-note">Это отдельное прохождение. Показатели и результат не влияют на основную игру.</p>':''}<div class="standalone-result-actions">${action}</div></div>`;
+  $('#event-count').textContent='РЕЗУЛЬТАТ';$('#event-tip').textContent=standalone?'Выбери эту игру ещё раз или вернись к списку миниигр.':'Посмотри результат, затем продолжай рабочий день.';
+}
 function handleChoice(button){const e=state.deck[state.index],choice=e.choices[Number(button.dataset.choice)];resolveEvent(choice[0],choice[2],true,choice[1]);}
 function miniRewardEffects(effects={}){const reward=normalizeEffects(effects);return Object.fromEntries(STAT_META.map(({key})=>[key,Math.max(5,reward[key]||0)]))}
 function miniRewardSummary(reward){return STAT_META.map(({key,label})=>`${label.toLowerCase()} +${reward[key]}`).join(', ')}
-function finishMini(e,success,title){const reward=success?miniRewardEffects(e.success):{};resolveEvent(title||e.title,reward,success,success?`Награда: ${miniRewardSummary(reward)}.`:'Награды нет, показатели не изменились.');}
+function finishMini(e,success,title){const reward=success?miniRewardEffects(e.success):{};const detail=success?'Награда начислена по всем трём показателям.':'Награды нет, показатели не изменились.';resolveEvent(title||e.title,reward,success,detail,true,reward);}
 function updateSequenceDragTarget(x,y){$$('.sequence-slot.drag-over').forEach(slot=>slot.classList.remove('drag-over'));const target=document.elementFromPoint(x,y)?.closest('[data-slot]');if(target)target.classList.add('drag-over');return target}
 function finishSequenceDrag(ev,cancelled=false){const drag=state.sequenceDrag;if(!drag||drag.pointerId!==ev.pointerId)return;const target=cancelled?null:updateSequenceDragTarget(ev.clientX,ev.clientY);if(drag.moved&&!cancelled){if(target)placeSequenceValue(drag.value,Number(target.dataset.slot),drag.sourceSlot);else if(drag.sourceSlot!==null&&document.elementFromPoint(ev.clientX,ev.clientY)?.closest('[data-sequence-bank]'))clearSequenceSlot(drag.sourceSlot);state.sequenceSuppressClickUntil=Date.now()+350}drag.sourceElement?.classList.remove('dragging');document.querySelector('.sequence-drag-ghost')?.remove();$$('.sequence-slot.drag-over').forEach(slot=>slot.classList.remove('drag-over'));state.sequenceDrag=null}
 document.addEventListener('pointerdown',ev=>{const source=ev.target.closest('[data-sequence-source]');if(!source||state.resolving)return;const sourceSlot=source.dataset.sequenceSource==='slot'?Number(source.dataset.slot):null;state.sequenceDrag={value:source.dataset.seq||source.textContent.trim(),sourceSlot,pointerId:ev.pointerId,startX:ev.clientX,startY:ev.clientY,moved:false,sourceElement:source};source.classList.add('dragging');const ghost=document.createElement('div');ghost.className='sequence-drag-ghost';ghost.textContent=state.sequenceDrag.value;ghost.style.left=`${ev.clientX+12}px`;ghost.style.top=`${ev.clientY+12}px`;document.body.append(ghost)});
@@ -240,9 +252,10 @@ function finishGame(crashed=false){
 $('#start-button').addEventListener('click',startGame);$('#mini-gallery-open').addEventListener('click',showMiniGallery);$('#mini-gallery-home').addEventListener('click',()=>{state.resolving=false;$('#mini-gallery').classList.add('hidden');intro.classList.remove('hidden')});$('#mini-arcade-back').addEventListener('click',showMiniGallery);$('#again-button').addEventListener('click',startGame);$('#recap-button').addEventListener('click',()=>$('#recap').classList.toggle('hidden'));
 document.addEventListener('click',ev=>{
   const miniPlay=ev.target.closest('[data-mini-play]');if(miniPlay){startStandaloneMini(miniPlay.dataset.miniPlay);return}
+  if(ev.target.closest('#mini-continue')){const crashed=state.pendingMiniCrash;state.pendingMiniCrash=false;if(crashed){finishGame(true)}else{state.index++;state.resolving=false;showEvent()}return}
   if(ev.target.closest('#mini-replay')){startStandaloneMini(state.standaloneEventId);return}
   if(ev.target.closest('#mini-result-list')){showMiniGallery();return}
-  if(ev.target.closest('#mini-skip')){resolveEvent('Миниигра пропущена',{cash:-5,focus:-5,team:-5},false,'Штраф за пропуск: капитал −5, фокус −5, команда −5.');return}
+  if(ev.target.closest('#mini-skip')){resolveEvent('Миниигра пропущена',{cash:-5,focus:-5,team:-5},false,'Штраф за пропуск: капитал −5, фокус −5, команда −5.',true,{});return}
   if(ev.target.closest('#misha-thanks')){finishMini(state.deck[state.index],true,'Подгон от Миши принят');return}
   const wireTile=ev.target.closest('[data-wire-tile]');if(wireTile){rotateWireTile(Number(wireTile.dataset.wireTile));return}
   const scheduleClient=ev.target.closest('[data-schedule-client]');if(scheduleClient){if(state.resolving||Date.now()<scheduleSuppressClickUntil)return;$('#schedule-status').textContent='Зажми карточку и перетащи её в подходящее окно.';return}
