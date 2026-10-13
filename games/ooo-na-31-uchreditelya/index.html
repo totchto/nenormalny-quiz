@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#d7f0da">
+  <meta name="description" content="Пять рабочих дней до запуска ООО: решай ситуации, проходи миниигры и удержи капитал, фокус и команду.">
+  <title>ООО на 31 учредителя — симулятор</title>
+  <link rel="stylesheet" href="game.css">
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="back-link" href="../../index.html" aria-label="Вернуться в каталог игр">← <span>КАТАЛОГ КВИЗОВ</span></a>
+      <div class="top-mark"><span class="mark-pixel">31</span><span>ОТДЕЛ ПЕРСПЕКТИВНЫХ АВАНТЮР</span></div>
+      <div class="top-status"><span class="live-dot"></span> ОФИС РАБОТАЕТ</div>
+    </header>
+
+    <section id="intro" class="intro view">
+      <div class="intro-art" aria-hidden="true">
+        <div class="sun"></div><div class="cloud cloud-a"></div><div class="cloud cloud-b"></div>
+        <div class="office-building"><div class="building-sign">ООО?</div><div class="windows"></div><div class="door"></div></div>
+        <div class="briefcase">▰</div><div class="coin coin-a">₽</div><div class="coin coin-b">₽</div>
+        <div class="intro-label">ПЯТЬ ДНЕЙ ДО ЗАПУСКА</div>
+      </div>
+      <div class="intro-copy">
+        <p class="eyebrow">УПРАВЛЕНЧЕСКИЙ СИМУЛЯТОР ИЗ ЧАТА</p>
+        <h1>ООО на<br><span>31 учредителя</span></h1>
+        <p class="intro-lede">500 рублей на капитал, очередь клиентов и команда, у которой в любой момент появится ещё одна идея.</p>
+        <div class="briefing">
+          <div class="briefing-head"><span class="pixel-star">✳</span> ЗАДАЧА НА НЕДЕЛЮ</div>
+          <p>Запусти компанию за пять рабочих дней: каждый день решай две ситуации и проходи одну миниигру. Набери минимум <strong>150 очков суммарно</strong> по капиталу, фокусу и команде. Успех в миниигре повышает все три показателя, а неудача не отнимает очки.</p>
+          <div class="briefing-foot"><span>10 СИТУАЦИЙ + 5 МИНИИГР</span><span>5 ДНЕЙ</span><span>1 ОФИС</span></div>
+        </div>
+        <div class="intro-actions"><button id="start-button" class="button button-primary">НАЧАТЬ ЗАПУСК <span>↗</span></button><button id="mini-gallery-open" class="button button-secondary">ВСЕ МИНИИГРЫ <span>▦</span></button></div>
+        <p class="controls-note">ИГРАЙ МЫШЬЮ ИЛИ КАСАНИЯМИ</p>
+      </div>
+    </section>
+
+    <section id="mini-gallery" class="mini-gallery view hidden">
+      <div class="gallery-heading"><div><p class="eyebrow">ОТДЕЛЬНЫЙ РЕЖИМ</p><h1>Выбери миниигру</h1><p>Играй без прохождения рабочей недели. Результаты и штрафы не влияют на основной запуск.</p></div><button id="mini-gallery-home" class="button button-secondary">← НА ГЛАВНУЮ</button></div>
+      <div id="mini-gallery-list" class="mini-gallery-list"></div>
+    </section>
+
+    <section id="game" class="game view hidden" aria-live="polite">
+      <div class="game-heading">
+        <div><p class="eyebrow" id="game-kicker">ПЯТЬ ДНЕЙ ДО ЗАПУСКА</p><h1 id="game-title">Рабочая неделя</h1></div>
+        <div class="day-badge"><span id="day-number">ДЕНЬ 1</span><strong id="day-name">Понедельник</strong></div>
+      </div>
+      <div id="mini-arcade-nav" class="mini-arcade-nav hidden"><button id="mini-arcade-back" class="button button-secondary">← К СПИСКУ МИНИИГР</button><span>ОТДЕЛЬНОЕ ПРОХОЖДЕНИЕ · БЕЗ ВЛИЯНИЯ НА ЗАПУСК</span></div>
+      <div class="meters" id="meters"></div>
+      <div class="game-layout">
+        <section class="event-panel panel">
+          <div class="event-topline"><span id="event-category" class="category-chip">СРОЧНОЕ</span><span id="event-count">СОБЫТИЕ 01 / 15</span></div>
+          <div id="event-content"></div>
+          <div class="event-footer"><span class="pixel-star">✳</span><span id="event-tip">Думай о последствиях — ресурсы общие.</span></div>
+        </section>
+        <aside class="side-column">
+          <section class="chat-panel panel">
+            <div class="side-title"><span>ЧАТ ГРУППЫ</span><span class="unread-count" id="unread-count">3</span></div>
+            <div class="chat-stream" id="chat-stream"></div>
+          </section>
+          <section class="log-panel panel">
+            <div class="side-title"><span>ЖУРНАЛ ЗАПУСКА</span><span class="log-icon">▤</span></div>
+            <ol id="event-log" class="event-log"><li class="muted-log">Пока всё под контролем.</li></ol>
+          </section>
+        </aside>
+      </div>
+      <footer class="game-footer"><span>ООО «НЕНАЗВАННАЯ КОМПАНИЯ»</span><span id="progress-track">▰▱▱▱▱ 0%</span><span>СОХРАНЕНИЕ: ЛОКАЛЬНОЕ</span></footer>
+    </section>
+
+    <section id="ending" class="ending view hidden">
+      <div class="ending-stamp" id="ending-stamp">ЗАПУЩЕНО</div>
+      <p class="eyebrow">ПЯТЬ ДНЕЙ СПУСТЯ</p>
+      <h1 id="ending-title">Компания работает!</h1>
+      <p id="ending-copy" class="ending-copy"></p>
+      <div id="final-stats" class="final-stats"></div>
+      <div class="ending-actions"><button id="again-button" class="button button-primary">ЕЩЁ ОДНА ПОПЫТКА ↗</button><button id="recap-button" class="button button-secondary">ПОСМОТРЕТЬ ИТОГИ</button></div>
+      <div id="recap" class="recap hidden"></div>
+    </section>
+    <footer class="site-foot"><span>СИМУЛЯТОР · 0.1</span><span>СДЕЛАНО ПО МОТИВАМ ЧАТА</span><span>▣ ПИКСЕЛЬНЫЙ ОФИС</span></footer>
+  </main>
+</body>
+</html>
